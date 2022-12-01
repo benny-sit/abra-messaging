@@ -14,8 +14,6 @@ RUN python manage.py makemigrations --noinput
 
 RUN python manage.py migrate --noinput
 
-RUN python manage.py createsuperuser --noinput --email mail@mail.com --username admin 
-
 COPY . /app
 
 ENTRYPOINT python manage.py runserver 0.0.0.0:8000
