@@ -16,4 +16,4 @@ RUN python manage.py migrate --noinput
 
 COPY . /app
 
-ENTRYPOINT python manage.py runserver
+ENTRYPOINT python manage.py runserver 0.0.0.0:8000
