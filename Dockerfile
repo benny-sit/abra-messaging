@@ -1,21 +1,28 @@
-FROM python:3.8-slim-buster
+ARG PYTHON_VERSION=3.10-slim-buster
 
-ENV PYTHONUNBUFFERED=1
+FROM python:${PYTHON_VERSION}
 
-WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-ADD . /app
+RUN mkdir -p /code
 
-COPY ./requirements.txt /app/requirements.txt
+WORKDIR /code
 
-RUN pip install -r requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+
+COPY . /code/
 
 RUN python manage.py makemigrations --noinput
 
 RUN python manage.py migrate --noinput
 
-RUN python manage.py createsuperuser --noinput --email mail@mail.com --username admin 
+EXPOSE 8000
 
-COPY . /app
-
-ENTRYPOINT python manage.py runserver 0.0.0.0:8000
+# replace demo.wsgi with <project_name>.wsgi
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "abramessages.wsgi"]
