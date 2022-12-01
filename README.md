@@ -4,6 +4,9 @@
 
 base_url= https://abra-messaging.onrender.com
 
+if not working try: 
+    base_url= https://abra-messaging-prod-abra-messages-nlpl12.mo4.mogenius.io
+
 Django DRF, contains one model ->
 
     Message:
